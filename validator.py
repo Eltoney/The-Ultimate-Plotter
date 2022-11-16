@@ -52,7 +52,6 @@ def experession_check(func):
     filtered = filtered.replace(')', '')
 
     terms = filtered.split()
-
     for term in terms:
         if not term.isnumeric():
             return 0
@@ -96,14 +95,14 @@ def function_checker(func):
     Function take mathematical function as string and valdiate it
     return: 0: if no error
             1: unsupported terms are used
-            3: unsupported brackets format
-            4: both unsupported brackets and terms
+            2: unsupported brackets format
+            3: both unsupported brackets and terms
     """
     mask = 0
     if not experession_check(func):
         mask |= 1
     if not bracket_check(func):
-        mask |= 3
+        mask |= 2
     return mask
 
 
@@ -115,9 +114,9 @@ def function_error_message(check_code):
     Function takes error code mask and return the messages that illustrates what have gone wrong
     """
     error_list = []
-    if (check_code | 1) == 1:
+    if (check_code & 1) == 1:
         error_list.append('Using unsupported terms')
-    if (check_code | 3) == 1:
+    if ((check_code >> 1) & 1) == 1:
         error_list.append('Using unsupported brackets format')
     return error_list
 
@@ -136,8 +135,8 @@ def function_format(func):
         'cos': 'np.cos',
         'tan': 'np.tan'
     }
-    for term, express in supported_expression:
-        func = func.replace(term, express)
+    for term in supported_expression.keys():
+        func = func.replace(term, supported_expression[term])
     return func.replace(' ', '')
 
 
@@ -161,7 +160,7 @@ def request_graph(min_x, max_x, func):
         my_plotter(min_x, max_x, function_format(func))
         return 1
     else:
-        errors = function_error_message(function_error_message)
+        errors = function_error_message(func_error_code)
         limt_errors = limit_error_message(limit_error_code)
         if limt_errors != None:
             errors.append(limt_errors)

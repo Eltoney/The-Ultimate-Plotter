@@ -14,7 +14,7 @@ def my_plotter(min_x, max_x, func):
     using the fucntion y = f(x)
 
     """
-    x = np.linspace(min_x, max_x, 100)
+    x = np.linspace(min_x, max_x)
     y = eval(func)
     plt.plot(x, y, '-g', label=func)
     plt.title(f'Graph of {func}', color='red')
@@ -24,5 +24,3 @@ def my_plotter(min_x, max_x, func):
     plt.grid()
     plt.show()
 
-
-my_plotter(20.0, 10.25, "2 * x + 10")
