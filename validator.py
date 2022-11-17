@@ -1,6 +1,3 @@
-from plotting import my_plotter
-
-
 def limits_checker(min_x, max_x):
     """
     :params:    min_x: type: float     description: the smallest x value
@@ -120,26 +117,6 @@ def function_error_message(check_code):
         error_list.append('Using unsupported brackets format')
     return error_list
 
-
-def function_format(func):
-    """
-    :param  func: type:str      description: mathematical function typed by the user
-    :return func: type:Str      description: formatted expression by adding python terms instead of raw math terms.
-
-    Function format the func string to prepare it for plotting.
-    """
-
-    supported_expression = {
-        '^': '**',
-        'sin': 'np.sin',
-        'cos': 'np.cos',
-        'tan': 'np.tan'
-    }
-    for term in supported_expression.keys():
-        func = func.replace(term, supported_expression[term])
-    return func.replace(' ', '')
-
-
 def request_graph(min_x, max_x, func):
     """
     :params:    min_x: type: float     description: the smallest x value
@@ -155,12 +132,11 @@ def request_graph(min_x, max_x, func):
     if no errors found it send the expression and limit to the plotting function to plot it
     then return the figure.
     """
-    origin_func = func
     limit_error_code = limits_checker(min_x, max_x)
     func_error_code = function_checker(func)
-    
+
     if limit_error_code + func_error_code == 0:
-        return my_plotter(min_x, max_x, function_format(func) , origin_func)
+        return []
     else:
         errors = function_error_message(func_error_code)
         limt_errors = limit_error_message(limit_error_code)

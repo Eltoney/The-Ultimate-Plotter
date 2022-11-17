@@ -1,4 +1,3 @@
-import sys
 from validator import request_graph
 from PySide2.QtWidgets import (
     QMainWindow, QApplication, QWidget, QGridLayout, QPushButton,
@@ -6,6 +5,8 @@ from PySide2.QtWidgets import (
 from PySide2.QtCore import Qt, QSize
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
+import numpy as np
+from plotting import plot_prepare
 
 
 class MyLabel(QLabel):
@@ -28,15 +29,30 @@ class MyInputBox(QLineEdit):
 
 class MplCanvas(FigureCanvasQTAgg):
 
-    def __init__(self, fig, parent=None, width=20, height=18, dpi=100):
+    def __init__(self, parent=None):
+        fig = Figure()
+        self.axes = fig.add_subplot(1, 1, 1)
+        self.setup_grid()
         super(MplCanvas, self).__init__(fig)
 
+    def setup_grid(self):
+        self.axes.spines['top'].set_color('none')
+        self.axes.spines['right'].set_color('none')
+        self.axes.spines['left'].set_linewidth(3)
+        self.axes.spines['bottom'].set_linewidth(3)
+        self.axes.set_xlabel('X', fontsize=9)
+        self.axes.set_ylabel('F(X)', fontsize=9)
+        self.axes.tick_params(axis='x', labelsize=9)
+        self.axes.tick_params(axis='y', labelsize=9)
+        self.axes.xaxis.set_ticks_position('bottom')
+        self.axes.yaxis.set_ticks_position('left')
+        self.axes.grid(True)
 
-class AnotherWindow(QWidget):
-    def __init__(self, func, layout):
-        super().__init__()
-        self.setWindowTitle(f"Graph of {func}")
-        self.setLayout(layout)
+    def plot_graph(self, x, y, func):
+        self.axes.set_ylabel(f'F(x) = {func}')
+        self.axes.set_title(f'Graph of {func}', color='red')
+        self.axes.plot(x, y, '-r')
+        self.draw()
 
 
 class MainWindow(QMainWindow):
@@ -53,7 +69,7 @@ class MainWindow(QMainWindow):
             \n   6. min and max value of x has to real numbers\
             \n      e.g: sin(x) + 5 * x + 3^2  + 10"
         self.setWindowTitle("The Ultimate Plotter")
-        self.setFixedSize(QSize(350, 400))
+        self.setFixedSize(QSize(850, 400))
 
         layout = QGridLayout()
 
@@ -66,6 +82,7 @@ class MainWindow(QMainWindow):
         self.max_input = MyInputBox('highest x', 80, 40)
         self.button = MyButton('Plot my graph')
         self.button.clicked.connect(self.process_graph)
+        self.graph = MplCanvas()
 
         layout.addWidget(self.intro, 0, 0, 1, 4)
         layout.addWidget(self.func_label, 2, 0, 1, 1)
@@ -74,41 +91,45 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.min_input, 4, 1)
         layout.addWidget(self.max_label, 5, 0, 1, 1)
         layout.addWidget(self.max_input, 5, 1)
-        layout.addWidget(self.button, 6, 2, 1, 2)
+        layout.addWidget(self.button, 6, 1, 1, 2)
+        layout.addWidget(self.graph, 0, 4, 7, 7)
 
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
 
+    def clear_graph_area(self):
+        self.graph.axes.clear()
+        self.graph.setup_grid()
+        self.graph.draw()
+
     def process_graph(self):
         min_x = self.min_input.text()
         max_x = self.max_input.text()
         func = self.func_input.text()
-        status = []
         try:
             min_x = float(min_x)
             max_x = float(max_x)
-            status = request_graph(min_x, max_x, func)
-            if type(status) == list:
+            errors = request_graph(min_x, max_x, func)
+            if len(errors) != 0:
+                self.clear_graph_area()
                 self.dlg = QMessageBox(self)
                 self.dlg.setWindowTitle("Error Occurred!")
                 msg = 'The following errors occurred: \n'
-                if len(status) == 1:
+                if len(errors) == 1:
                     msg = msg[:19] + msg[20:]
-                for err in status:
+                for err in errors:
                     msg += '\t'
                     msg += err
                     msg += '\n'
                 self.dlg.setText(msg)
                 self.dlg.exec_()
             else:
-                grph = MplCanvas(status)
-                toolbar = NavigationToolbar(grph, self)
-                layout = QVBoxLayout()
-                layout.addWidget(toolbar)
-                layout.addWidget(grph)
-                self.w = AnotherWindow(func, layout)
-                self.w.show()
+                self.clear_graph_area()
+                paramters = plot_prepare(min_x, max_x, func)
+                x = paramters[0]
+                y = paramters[1]
+                self.graph.plot_graph(x, y, func)
         except:
             self.dlg = QMessageBox(self)
             self.dlg.setWindowTitle("Error Occurred!")
