@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def my_plotter(min_x, max_x, func , origin_func):
+def my_plotter(min_x, max_x, func, origin_func):
     """
     :params:    min_x: type: float     description: the smallest x value
                 max_x: type: float     description: the highest  x value
@@ -19,9 +19,9 @@ def my_plotter(min_x, max_x, func , origin_func):
     y = eval(func)
     plt.plot(x, y, '-g', label=origin_func)
     plt.title(f'Graph of {origin_func}', color='red')
-    plt.xlabel('x', color='blue')
-    plt.ylabel('y', color='brown')
+    plt.xlabel('x', color='blue', fontsize=18)
+    plt.ylabel('y', color='brown', fontsize=16)
     plt.legend(loc='upper left')
     plt.grid()
     plt.show()
-
+    
