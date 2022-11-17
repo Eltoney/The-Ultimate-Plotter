@@ -147,19 +147,20 @@ def request_graph(min_x, max_x, func):
                 func:  type: string    description: math function entered by user
 
     :return
-            1 if no error and plotting is okay
+            a figure of the plotted graph if no errors found
+            else
             errors type: list   description: error message list
 
     Function that check if any errors in the expression are found and report the errors,
     if no errors found it send the expression and limit to the plotting function to plot it
+    then return the figure.
     """
     origin_func = func
     limit_error_code = limits_checker(min_x, max_x)
     func_error_code = function_checker(func)
     
     if limit_error_code + func_error_code == 0:
-        my_plotter(min_x, max_x, function_format(func) , origin_func)
-        return 1
+        return my_plotter(min_x, max_x, function_format(func) , origin_func)
     else:
         errors = function_error_message(func_error_code)
         limt_errors = limit_error_message(limit_error_code)

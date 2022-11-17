@@ -2,8 +2,10 @@ import sys
 from validator import request_graph
 from PySide2.QtWidgets import (
     QMainWindow, QApplication, QWidget, QGridLayout, QPushButton,
-    QLineEdit, QLabel, QMessageBox)
+    QLineEdit, QLabel, QMessageBox, QVBoxLayout)
 from PySide2.QtCore import Qt, QSize
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
 
 
 class MyLabel(QLabel):
@@ -22,6 +24,19 @@ class MyInputBox(QLineEdit):
         super().__init__()
         self.setPlaceholderText(placeholdText)
         self.setFixedSize(QSize(w, h))
+
+
+class MplCanvas(FigureCanvasQTAgg):
+
+    def __init__(self, fig, parent=None, width=20, height=18, dpi=100):
+        super(MplCanvas, self).__init__(fig)
+
+
+class AnotherWindow(QWidget):
+    def __init__(self, func, layout):
+        super().__init__()
+        self.setWindowTitle(f"Graph of {func}")
+        self.setLayout(layout)
 
 
 class MainWindow(QMainWindow):
@@ -69,28 +84,37 @@ class MainWindow(QMainWindow):
         min_x = self.min_input.text()
         max_x = self.max_input.text()
         func = self.func_input.text()
-        graphing_errors = []
+        status = []
         try:
             min_x = float(min_x)
             max_x = float(max_x)
-            graphing_errors = request_graph(min_x, max_x, func)
-            if graphing_errors != 1:
+            status = request_graph(min_x, max_x, func)
+            if type(status) == list:
                 self.dlg = QMessageBox(self)
                 self.dlg.setWindowTitle("Error Occurred!")
                 msg = 'The following errors occurred: \n'
-                if len(graphing_errors) == 1:
+                if len(status) == 1:
                     msg = msg[:19] + msg[20:]
-                for err in graphing_errors:
+                for err in status:
                     msg += '\t'
                     msg += err
                     msg += '\n'
                 self.dlg.setText(msg)
                 self.dlg.exec_()
+            else:
+                grph = MplCanvas(status)
+                toolbar = NavigationToolbar(grph, self)
+                layout = QVBoxLayout()
+                layout.addWidget(toolbar)
+                layout.addWidget(grph)
+                self.w = AnotherWindow(func, layout)
+                self.w.show()
         except:
             self.dlg = QMessageBox(self)
             self.dlg.setWindowTitle("Error Occurred!")
             self.dlg.setText("Please follow the instructions for input")
             self.dlg.exec_()
+
 
 if __name__ == '__main__':
     app = QApplication()

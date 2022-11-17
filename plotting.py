@@ -20,17 +20,18 @@ def my_plotter(min_x, max_x, func, origin_func):
     if is_constant_func(func):
         plt.axhline(y, color='g')
         y = np.ones_like(x) * (max_x - min_x + 1)
-        # uncomment the line below if you want the label to 
+        # uncomment the line below if you want the label to
         # be the value the constant function evaluate to
         # origin_func = eval(func)
 
+    fig = plt.figure()
     plt.plot(x, y, '-g', label=origin_func)
     plt.title(f'Graph of {origin_func}', color='red')
     plt.xlabel('x', color='blue', fontsize=18)
     plt.ylabel('y', color='brown', fontsize=16)
     plt.legend(loc='upper left')
     plt.grid()
-    plt.show()
+    return fig
 
 
 def is_constant_func(func):
