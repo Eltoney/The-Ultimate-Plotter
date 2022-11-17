@@ -153,11 +153,12 @@ def request_graph(min_x, max_x, func):
     Function that check if any errors in the expression are found and report the errors,
     if no errors found it send the expression and limit to the plotting function to plot it
     """
+    origin_func = func
     limit_error_code = limits_checker(min_x, max_x)
     func_error_code = function_checker(func)
-
+    
     if limit_error_code + func_error_code == 0:
-        my_plotter(min_x, max_x, function_format(func))
+        my_plotter(min_x, max_x, function_format(func) , origin_func)
         return 1
     else:
         errors = function_error_message(func_error_code)

@@ -67,23 +67,30 @@ def test_bracket_check3():
 def test_bracket_check3():
     assert bracket_check('3 * x + () * 5') == 0
 
+
 def test_function_checker1():
     assert function_checker('5 + 2 * x') == 0
+
 
 def test_function_checker2():
     assert function_checker('5 * x + 2 * y') == 1
 
+
 def test_function_checker3():
     assert function_checker('5 + 5 * sin(x)') == 0
+
 
 def test_function_checker4():
     assert function_checker('5 * x + 2 * ()') == 2
 
+
 def test_function_checker5():
     assert function_checker('5 * x + 2 * (y)') == 1
 
+
 def test_function_checker6():
     assert function_checker('5 * y + 3 + ()') == 3
+
 
 def test_function_checker7():
     assert function_checker('5 * x + 3 * x ^ 2') == 0

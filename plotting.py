@@ -2,11 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def my_plotter(min_x, max_x, func):
+def my_plotter(min_x, max_x, func , origin_func):
     """
     :params:    min_x: type: float     description: the smallest x value
                 max_x: type: float     description: the highest  x value
-                func:  type: string    description: f(x) of each x value in the range
+                func:  type: string    description: f(x) ready to be graphed
+                origin_func type:string  description: origin function entered by user
 
     :return: None
 
@@ -16,8 +17,8 @@ def my_plotter(min_x, max_x, func):
     """
     x = np.linspace(min_x, max_x)
     y = eval(func)
-    plt.plot(x, y, '-g', label=func)
-    plt.title(f'Graph of {func}', color='red')
+    plt.plot(x, y, '-g', label=origin_func)
+    plt.title(f'Graph of {origin_func}', color='red')
     plt.xlabel('x', color='blue')
     plt.ylabel('y', color='brown')
     plt.legend(loc='upper left')

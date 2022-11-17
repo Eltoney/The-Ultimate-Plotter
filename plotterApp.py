@@ -74,7 +74,6 @@ class MainWindow(QMainWindow):
             min_x = float(min_x)
             max_x = float(max_x)
             graphing_errors = request_graph(min_x, max_x, func)
-            print(graphing_errors)
             if graphing_errors != 1:
                 self.dlg = QMessageBox(self)
                 self.dlg.setWindowTitle("Error Occurred!")
