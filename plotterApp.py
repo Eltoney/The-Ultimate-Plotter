@@ -92,8 +92,8 @@ class MainWindow(QMainWindow):
             self.dlg.setText("Please follow the instructions for input")
             self.dlg.exec_()
 
-
-app = QApplication(sys.argv)
-w = MainWindow()
-w.show()
-app.exec_()
+if __name__ == '__main__':
+    app = QApplication()
+    w = MainWindow()
+    w.show()
+    app.exec_()

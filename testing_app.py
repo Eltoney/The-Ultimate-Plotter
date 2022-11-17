@@ -15,7 +15,6 @@ def app(qtbot):
     qtbot.addWidget(test_plotter_app)
     return test_plotter_app
 
-
 def test_func_label(app):
     assert app.func_label.text() == 'Function: '
 
