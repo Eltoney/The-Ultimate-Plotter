@@ -17,6 +17,13 @@ def my_plotter(min_x, max_x, func, origin_func):
     """
     x = np.linspace(min_x, max_x)
     y = eval(func)
+    if is_constant_func(func):
+        plt.axhline(y, color='g')
+        y = np.ones_like(x) * (max_x - min_x + 1)
+        # uncomment the line below if you want the label to 
+        # be the value the constant function evaluate to
+        # origin_func = eval(func)
+
     plt.plot(x, y, '-g', label=origin_func)
     plt.title(f'Graph of {origin_func}', color='red')
     plt.xlabel('x', color='blue', fontsize=18)
@@ -24,4 +31,17 @@ def my_plotter(min_x, max_x, func, origin_func):
     plt.legend(loc='upper left')
     plt.grid()
     plt.show()
-    
+
+
+def is_constant_func(func):
+    """
+    :params: func: type:string   description: formated function ready to plot
+    :return: bool
+    Function takes the maths function, return True if it is a constant function and
+    False if it not
+    """
+    try:
+        temp = eval(func)
+    except:
+        return False
+    return True
