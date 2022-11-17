@@ -8,10 +8,13 @@ refer to requirements.txt to install the requied packages before using the progr
 
 you can use to install mulitple pip packages 
 
+```console
 pip3 install package_a package_b 
 
 
 ## Snapshots
+
+StartUp page
 
 ![Home page](/snapshots/homepage.png)
 
