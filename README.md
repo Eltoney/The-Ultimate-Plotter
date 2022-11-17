@@ -11,22 +11,28 @@ you can use to install mulitple pip packages
 pip3 install package_a package_b 
 
 
+## Snapshots
+
 ![Home page](/snapshots/homepage.png)
 
 ### Working Examples
 
-![working function: f(x) = 5 + 2 *x ](/snapshots/func1.png')
+f(x) = 5 + 2 *x
 
+![working function: f(x) = 5 + 2 *x ](/snapshots/func1.png)
+
+f(x) = 5 + x ^ 2 + x
 
 ![working function: f(x) = 5 + x ^ 2 + x](/snapshots/func2.png)
 
+f(x) = sin(x)
 
 ![working function: f(x) = sin(x)](/snapshots/func3.png)
 
+f(x) = x ^ 4 + 100 * x + x / 2
+![working function: f(x) = x ^ 4 + 100 * x + x / 2](/snapshots/func4.png)
 
-![working function: f(x) = x ^ 4 + 100 * x + x \ 2](/snapshots/func4.png)
-
-
+f(x) = x^3 + x^2 + x
 ![working function: f(x) = x^3 + x^2 + x](/snapshots/func5.png)
 
 
